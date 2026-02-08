@@ -1,5 +1,6 @@
 package com.example.sputnik_onegina;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +14,19 @@ public class ConstellationRepository {
         constellations = new HashMap<>();
     }
     
-    void put(String key, SatelliteConstellation value) {
+    public void put(String key, SatelliteConstellation value) {
         constellations.put(key, value);
     }
 
-    SatelliteConstellation get(String key) {
+    public SatelliteConstellation get(String key) {
         return constellations.get(key);
+    }
+
+    public ArrayList<SatelliteConstellation> getAllConstellations() {
+        ArrayList<SatelliteConstellation> answer = new ArrayList<>();
+        for (SatelliteConstellation satelliteConstellation : constellations.values()) {
+            answer.add(satelliteConstellation);
+        }
+        return answer;
     }
 }

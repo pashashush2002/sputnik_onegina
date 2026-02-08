@@ -4,32 +4,30 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @Component
+@NoArgsConstructor
 public class SatelliteConstellation {
+    @Getter
     private String constellationName;
+    @Getter
     private ArrayList<Satellite> satellites;
 
-    SatelliteConstellation(String constellationName) {
+    public SatelliteConstellation(String constellationName) {
         this.constellationName = constellationName;
         System.out.println("Создана спутниковая группировка " + this.constellationName + "!");
         satellites = new ArrayList<Satellite>();
     }
 
-    SatelliteConstellation() {
-        this.constellationName = null;
-        satellites = new ArrayList<Satellite>();
-    }
-
-    void addSatellite(Satellite satellite) {
+    public void addSatellite(Satellite satellite) {
         satellites.add(satellite);
         System.out.println("В группировку " + constellationName + " добавлен спутник " + satellite.name + "!");
     }
-    void executeAllMissions() {
+    public void executeAllMissions() {
         System.out.println("Выполнение миссий группировки " + constellationName + ":");
         for(Satellite satellite: satellites)
             satellite.performMission();
-    }
-    ArrayList<Satellite> getSatellites() {
-        return satellites;
     }
 }

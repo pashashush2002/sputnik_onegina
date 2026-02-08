@@ -2,27 +2,23 @@ package com.example.sputnik_onegina;
 
 import org.springframework.stereotype.Component;
 
+import lombok.NoArgsConstructor;
+
 @Component
+@NoArgsConstructor
 public class SatelliteState {
     private boolean isActive;
     private String name;
 
-    SatelliteState(String name) {
+    public SatelliteState(String name) {
         isActive = false;
         this.name = name;
     }
 
-    SatelliteState() {
-        isActive = false;
-        this.name = null;
-    }
-
-    
-
-    boolean isActive() {
+    public boolean isActive() {
         return isActive;
     }
-    boolean activate(EnergySystem energy) {
+    public boolean activate(EnergySystem energy) {
         if (energy.getBatteryLevel()>0.2)
             isActive = true;
         if (isActive)
@@ -31,7 +27,7 @@ public class SatelliteState {
             System.out.println("Спутник " + name + " не активирован (заряд: " + energy.getBatteryLevel() * 100 + "%)!");
         return isActive;
     };
-    void deactivate() {
+    public void deactivate() {
         if (isActive) {
             isActive = false;
             System.out.println("Спутник " + name + " деактивирован!");
