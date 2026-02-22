@@ -10,8 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 @DisplayName("Юнит-тестирование")
 @SpringBootTest
 public class ConstellationRepositoryUnitTest {
-    Satellite comsat = new CommunicationSatellite("Спутник связи", 1., 100.);
-    Satellite imgsat = new ImagingSatellite("Спутник ДЗЗ", 1., 100.);
+    SatelliteFactory satFac = new CommunicationSatelliteFactory();
+    Satellite comsat = satFac.createSatelliteWithParameter("Спутник связи", 1., 100.);
+    {satFac = new ImagingSatelliteFactory();}
+    Satellite imgsat = satFac.createSatelliteWithParameter("Спутник ДЗЗ", 1., 100.);
     ConstellationRepository repository = new ConstellationRepository();
     SatelliteConstellation constellation = new SatelliteConstellation("Группировка");
     @Test

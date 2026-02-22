@@ -11,11 +11,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ConstellationRepositoryIntegrationTest {
     @Autowired
     ConstellationRepository repository;
-    Satellite comSat1 = new CommunicationSatellite("Связь-1", 0.85, 500.);
-    Satellite comSat2 = new CommunicationSatellite("Связь-2", 0.75, 1000.);
-    Satellite imgSat1 = new ImagingSatellite("ДЗЗ-1", 0.92, 2.5);
-    Satellite imgSat2 = new ImagingSatellite("ДЗЗ-2", 0.45, 1.);
-    Satellite imgSat3 = new ImagingSatellite("ДЗЗ-3", 0.15, 0.5);
+    SatelliteFactory satFac = new CommunicationSatelliteFactory();
+    Satellite comSat1 = satFac.createSatelliteWithParameter("Связь-1", 0.85, 500.);
+    Satellite comSat2 = satFac.createSatelliteWithParameter("Связь-2", 0.75, 1000.);
+    {satFac = new ImagingSatelliteFactory();}
+    Satellite imgSat1 = satFac.createSatelliteWithParameter("ДЗЗ-1", 0.92, 2.5);
+    Satellite imgSat2 = satFac.createSatelliteWithParameter("ДЗЗ-2", 0.45, 1.);
+    Satellite imgSat3 = satFac.createSatelliteWithParameter("ДЗЗ-3", 0.15, 0.5);
     SatelliteConstellation satcon = new SatelliteConstellation("Орбита"); // Создание группировки
     @Test
     public void IntegrationTest() {

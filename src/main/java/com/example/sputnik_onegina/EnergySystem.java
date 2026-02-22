@@ -1,14 +1,9 @@
 package com.example.sputnik_onegina;
 
-import org.springframework.stereotype.Component;
-
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Component
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class EnergySystem {
     @Getter
     private double batteryLevel;
