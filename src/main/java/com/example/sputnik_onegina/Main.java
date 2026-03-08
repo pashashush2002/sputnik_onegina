@@ -1,5 +1,7 @@
 package com.example.sputnik_onegina;
 
+import java.util.ArrayList;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -17,24 +19,29 @@ public class Main {
 				Satellite imgSat2 = service.createSatellite(new ImagingSatelliteParam( "ДЗЗ-2", 0.45, 1.));
 				Satellite imgSat3 = service.createSatellite(new ImagingSatelliteParam( "ДЗЗ-3", 0.15, 0.5));
 
-				SpaceOperationCenterService spaceOperationCenterService = context.getBean(SpaceOperationCenterService.class);
-				spaceOperationCenterService.createAndSaveConstellation("Орбита-1");
-				spaceOperationCenterService.createAndSaveConstellation("Орбита-2");
+				ConstellationService constellationService = context.getBean(ConstellationService.class);
+				SpaceOperationCenterService spaceOperationCenterService = context.getBean(SpaceOperationCenterService.class, constellationService);
+				constellationService.createAndSaveConstellation("Орбита-1");
+				constellationService.createAndSaveConstellation("Орбита-2");
 				System.out.println("Формирование спутниковой группировки:");
-				spaceOperationCenterService.addSatelliteToConstellation("Орбита-1", comSat1);
-				spaceOperationCenterService.addSatelliteToConstellation("Орбита-1", imgSat1);
-				spaceOperationCenterService.addSatelliteToConstellation("Орбита-1", imgSat2);
-				spaceOperationCenterService.addSatelliteToConstellation("Орбита-2", comSat2);
-				spaceOperationCenterService.addSatelliteToConstellation("Орбита-2", imgSat3);
+				ArrayList<Satellite> orbita1 = new ArrayList<>();
+				ArrayList<Satellite> orbita2 = new ArrayList<>();
+				orbita1.add(comSat1);
+				orbita1.add(imgSat1);
+				orbita1.add(imgSat2);
+				orbita2.add(comSat2);
+				orbita2.add(imgSat3);
+				spaceOperationCenterService.addSatellite(new AddSatelliteRequest("Орбита-1", orbita1));
+				spaceOperationCenterService.addSatellite(new AddSatelliteRequest("Орбита-2", orbita2));
 
-				spaceOperationCenterService.showConstellationStatus("Орбита-1");
+				constellationService.showConstellationStatus("Орбита-1");
 
 				System.out.println("Активация спутниковой группировки:");
-				spaceOperationCenterService.activateAllSatellites("Орбита-1");
+				constellationService.activateAllSatellites("Орбита-1");
 
-				spaceOperationCenterService.executeConstellationMission("Орбита-1");
+				spaceOperationCenterService.executeMission(new MissionRequest("Орбита-1"));
 
-				spaceOperationCenterService.showConstellationStatus("Орбита-1");
+				constellationService.showConstellationStatus("Орбита-1");
 			}
 			catch (SpaceOperationException e) {
 				System.out.println(e.getMessage());
