@@ -2,17 +2,19 @@ package com.example.sputnik_onegina;
 
 import org.springframework.stereotype.Service;
 
-import lombok.NoArgsConstructor;
-
 @Service
-@NoArgsConstructor
 public class ImagingSatelliteFactory extends SatelliteFactory {
     @Override
-    public Satellite createSatellite(String name, double batteryLevel) {
-        return new ImagingSatellite(name, batteryLevel, 0);
+    public Satellite createSatelliteWithParameter(SatelliteParam param) throws SpaceOperationException {
+        if (param instanceof ImagingSatelliteParam imgParam) {
+            return new ImagingSatellite(imgParam.getName(), imgParam.getBatteryLevel(), imgParam.getResolition());
+        }
+        else {
+            throw new SpaceOperationException("Требуемый тип IMAGE");
+        }
     }
     @Override
-    public Satellite createSatelliteWithParameter(String name, double batteryLevel, double parameter) {
-        return new ImagingSatellite(name, batteryLevel, parameter);
+    public boolean isSatelliteTypeSupported(SatelliteType type) {
+        return type == SatelliteType.IMAGE;
     }
 }

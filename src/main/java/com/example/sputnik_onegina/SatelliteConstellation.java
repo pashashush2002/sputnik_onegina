@@ -18,7 +18,7 @@ public class SatelliteConstellation {
     public SatelliteConstellation(String constellationName) {
         this.constellationName = constellationName;
         System.out.println("Создана спутниковая группировка " + this.constellationName + "!");
-        satellites = new ArrayList<Satellite>();
+        satellites = new ArrayList<>();
     }
 
     public void addSatellite(Satellite satellite) {

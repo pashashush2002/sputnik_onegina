@@ -11,6 +11,7 @@ public abstract class Satellite {
     @Getter
     protected String name;
     protected SatelliteState state;
+    @Getter
     protected EnergySystem energy;
 
     public Satellite(String name, double batteryLevel) {
