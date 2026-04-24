@@ -6,7 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class Main {
-	void main(String[] args) {
+	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
 		context.getBean(SpaceOperationController.class);
 	}
