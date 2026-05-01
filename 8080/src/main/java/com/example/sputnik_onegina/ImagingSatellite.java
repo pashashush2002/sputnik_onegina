@@ -1,12 +1,16 @@
 package com.example.sputnik_onegina;
 
 import org.springframework.stereotype.Component;
+import jakarta.persistence.Entity;
+import jakarta.persistence.DiscriminatorValue;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Component
 @NoArgsConstructor
+@Entity
+@DiscriminatorValue("IMAGE")
 public class ImagingSatellite extends Satellite {
     @Getter
     private double resolution;

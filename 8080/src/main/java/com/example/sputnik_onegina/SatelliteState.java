@@ -1,13 +1,17 @@
 package com.example.sputnik_onegina;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Column;
 import org.springframework.stereotype.Component;
 
 import lombok.NoArgsConstructor;
 
 @Component
 @NoArgsConstructor
+@Embeddable
 public class SatelliteState {
     private boolean isActive;
+    @Column(name = "state_name")
     private String name;
 
     public SatelliteState(String name) {

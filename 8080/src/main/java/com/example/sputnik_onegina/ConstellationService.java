@@ -2,28 +2,44 @@ package com.example.sputnik_onegina;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ConstellationService {
-    private final ConstellationRepository repository;
+    private final ConstellationRepository constellationRepository;
+    private final EnergyRepository energyRepository;
+    private final SatelliteRepository satelliteRepository;
 
-    void createAndSaveConstellation(String name) {
+    public void createAndSaveConstellation(String name) {
         SatelliteConstellation constellation = new SatelliteConstellation(name);
-        repository.put(name, constellation);
+        constellationRepository.save(constellation);
         System.out.println("Спутниковая группировка " + name + " успешно сохранена!");
     }
-    void addSatelliteToConstellation(String constellationName, Satellite satellite) {
-        SatelliteConstellation constellation = repository.get(constellationName);
-        if (constellation == null) {
-            createAndSaveConstellation(constellationName);
-            constellation = repository.get(constellationName);
-        }
-        constellation.addSatellite(satellite);
-        // repository.put(constellationName, constellation);
+
+    @Transactional(readOnly = true)
+    public SatelliteConstellation findByConstellationName(String constellationName) {
+        return constellationRepository.findByConstellationName(constellationName)
+                .orElseThrow(() -> new RuntimeException("Группировка не найдена: " + constellationName));
     }
-    void executeMission(String constellationName, String satelliteName, boolean isConstellation) throws SpaceOperationException {
-        SatelliteConstellation constellation = repository.get(constellationName);
+
+    public void addSatelliteToConstellation(String constellationName, Satellite satellite) {
+        SatelliteConstellation constellation;
+        try {
+            constellation = findByConstellationName(constellationName);
+        }
+        catch(RuntimeException e) {
+            constellation = new SatelliteConstellation(constellationName);
+        }
+        EnergySystem energy = satellite.getEnergy();
+        energy = energyRepository.save(energy);
+        satellite.setEnergy(energy);
+        satellite = satelliteRepository.save(satellite);
+        constellation.addSatellite(satellite);
+        constellationRepository.save(constellation);
+    }
+    public void executeMission(String constellationName, String satelliteName, boolean isConstellation) throws SpaceOperationException {
+        SatelliteConstellation constellation = findByConstellationName(constellationName);
         if (isConstellation) {
              if (satelliteName != null)
                  throw new SpaceOperationException("Задано имя спутника для миссии группировки");
@@ -37,14 +53,14 @@ public class ConstellationService {
             }
         }
     }
-    void activateAllSatellites(String constellationName) {
-        SatelliteConstellation constellation = repository.get(constellationName);
+    public void activateAllSatellites(String constellationName) {
+        SatelliteConstellation constellation = findByConstellationName(constellationName);
         for (Satellite satellite: constellation.getSatellites()) {
             satellite.activate();
         }
     }
-    void showConstellationStatus(String constellationName) {
-        SatelliteConstellation constellation = repository.get(constellationName);
+    public void showConstellationStatus(String constellationName) {
+        SatelliteConstellation constellation = findByConstellationName(constellationName);
         System.out.println("Количество спутников в группировке: " + constellation.getSatellites().size());
         for (Satellite satellite: constellation.getSatellites()) {
             if (satellite.isActive()) {
@@ -57,8 +73,8 @@ public class ConstellationService {
     }
     public String showOverview() { // Предполагаем, что все спутники в группировках
         String answer = "Информация о системе:\n";
-        answer += "Количество группировок: " + repository.getAllConstellations().size() + '\n';
-        for (SatelliteConstellation constellation: repository.getAllConstellations()) {
+        answer += "Количество группировок: " + constellationRepository.findAll().size() + '\n';
+        for (SatelliteConstellation constellation: constellationRepository.findAll()) {
             answer += "Имя группировки: " + constellation.getConstellationName() + '\n';
             answer += "Количество спутников: " + constellation.getSatellites().size() + '\n';
             for (Satellite satellite: constellation.getSatellites()) {
@@ -70,7 +86,10 @@ public class ConstellationService {
         return answer;
     }
     public void deleteSatellite(String constellationName, String satelliteName) {
-        SatelliteConstellation constellation = repository.get(constellationName);
+
+        SatelliteConstellation constellation = findByConstellationName(constellationName);
+        Satellite satellite = satelliteRepository.findByNameAndConstellationId(satelliteName, constellation.getId()).get();
+        satelliteRepository.delete(satellite);
         System.out.println("Спутник "+ satelliteName + " удалён из группировки " + constellationName + '!');
     }
 }

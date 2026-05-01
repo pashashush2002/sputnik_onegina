@@ -23,7 +23,7 @@ public class SpaceOperationCenterService {
             }
         }
     }
-    public void executeMission(MissionRequest missionRequest) throws SpaceOperationException {
+    public void executeMission(MissionRequest missionRequest) throws SpaceOperationException  {
         constellationService.executeMission(missionRequest.getConstellationName(), missionRequest.getSatelliteName(), missionRequest.isConstellation());
     }
     public String getSystemOverview() {

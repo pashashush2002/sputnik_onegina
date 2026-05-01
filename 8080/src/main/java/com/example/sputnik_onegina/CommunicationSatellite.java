@@ -1,5 +1,7 @@
 package com.example.sputnik_onegina;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
@@ -7,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 @Component
 @NoArgsConstructor
+@Entity
+@DiscriminatorValue("COMMUNICATION")
 public class CommunicationSatellite extends Satellite {
     @Getter
     private double bandwith;
