@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package telemetry;
+
+// import "google/protobuf/timestamp.proto";
+
+message TelemetryRequest {
+    int64 device_id = 1; // Идентификатор устройства
+    int64 timestamp = 2;   // Время запроса в формате Unix timestamp
+}
+
+message TelemetryUpdate {
+    int64 device_id = 1; // Идентификатор устройства
+    double inner_temperature = 2; // Температура устройства внутри
+    double outer_temperature = 3; // Температура устройства снаружи
+    int64 timestamp = 4;    // Время обновления в формате Unix timestamp
+}
+
+service TelemetryService {
+    rpc StreamTelemetry(TelemetryRequest) returns (stream TelemetryUpdate);
+}
