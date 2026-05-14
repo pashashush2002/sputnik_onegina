@@ -13,4 +13,4 @@ app:
         - targetType: CONSTELLATION
           constellationName: "TestConstellation"
           cron: "0 */1 * * * *"   # каждую минуту
-      url: "${SERVER_PORT:http://localhost:8080}/api"
+      url: "${SERVER_URL:http://localhost:8080}/api"
