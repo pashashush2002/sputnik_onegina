@@ -31,7 +31,7 @@ public class SpaceOperationController {
     public ResponseEntity<String> getSystemOverview() {
         return ResponseEntity.ok(spaceOperationCenterService.getSystemOverview());
     }
-    @DeleteMapping("/api/constellations/{constellationName}/satellites/{satelliteName}")
+    @DeleteMapping("/constellations/{constellationName}/satellites/{satelliteName}")
     public ResponseEntity<Void> deleteSatellite(@PathVariable String constellationName, @PathVariable String satelliteName) {
         spaceOperationCenterService.deleteSatellite(constellationName, satelliteName);
         return ResponseEntity.noContent().build();
