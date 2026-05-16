@@ -1,10 +1,11 @@
 package com.example.sputnik_onegina;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Configuration
@@ -14,8 +15,8 @@ public class RestClientConfig {
 
     @Bean
     public RestClient spaceOperationRestClient() {
-        return  RestClient.builder()
-                .baseUrl(properties.uri())
+        return RestClient.builder()
+                .baseUrl(properties.url())
                 .build();
     }
 }
