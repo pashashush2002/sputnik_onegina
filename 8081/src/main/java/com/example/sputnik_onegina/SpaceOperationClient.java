@@ -4,14 +4,14 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class SpaceOperationClient {
-    private RestClient spaceOperationRestClient;
+    private final RestClient spaceOperationRestClient;
 
     public void AddSatellite(AddSatelliteRequest request) {
         spaceOperationRestClient.post()
@@ -25,7 +25,7 @@ public class SpaceOperationClient {
 
     public void executeMission(MissionRequest request) {
         spaceOperationRestClient.post()
-        .uri("/add-missions")
+        .uri("/missions")
         .contentType(MediaType.APPLICATION_JSON)
         .body(request)
         .retrieve()
@@ -34,14 +34,14 @@ public class SpaceOperationClient {
     }
 
     public String getSystemOverview() {
-        return spaceOperationRestClient.get()
+        return spaceOperationRestClient.post()
         .uri("/overview")
         .retrieve()
         .body(String.class);
     }
 
     public void removeSatellite(String constellationName, String satelliteName) {
-        spaceOperationRestClient.delete()
+        spaceOperationRestClient.post()
         .uri("/constellations/{constellationName}/satellites/{satellitesName}",
             constellationName, satelliteName
         )
