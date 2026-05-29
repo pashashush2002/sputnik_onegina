@@ -33,6 +33,7 @@ import lombok.Setter;
 public abstract class Satellite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
     @Getter

@@ -26,6 +26,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.kafka:spring-kafka")
 	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
 	implementation("org.aspectj:aspectjweaver")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
