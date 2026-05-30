@@ -1,0 +1,5 @@
+docker-compose up --build
+cd 8080
+.\gradlew.bat build -x test
+cd build/libs
+java -jar .\sputnik_onegina-0.0.1-SNAPSHOT.jar
