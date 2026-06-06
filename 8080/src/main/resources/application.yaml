@@ -20,24 +20,25 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    sql:
-      init:
-        mode: always
-    kafka:
-      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVICES:localhost:29093}
+  sql:
+    init:
+      mode: always
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVICES:localhost:29093}
+    properties:
+      security.protocol: PLAINTEXT
+    admin:
+      auto-create-topics: true
+    consumer:
+      group-id: kpo
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        security.protocol: PLAINTEXT
-      admin:
-        auto-create-topics: true
-      consumer:
-        group-id: kpo
-        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-        properties:
-          spring.json.trusted.packages: "com.example.sputnik_onegina,java.util,java.lang"
-      producer:
-        key-serializer: org.apache.kafka.common.serialization.StringSerializer
-        value-serializer: org.springframework.kafka.support.serializer.JsonSserializer
+        spring.json.trusted.packages: "com.example.sputnik_onegina,java.util,java.lang"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 
 grpc:
     client:
