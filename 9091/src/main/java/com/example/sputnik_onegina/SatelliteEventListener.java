@@ -12,12 +12,19 @@ import org.springframework.stereotype.Component;
 public class SatelliteEventListener {
     private static final String topic = "satellite-events";
     private final SatelliteIdRepository satelliteIdRepository;
+    private final InboxService inboxService;
 
     @KafkaListener(topics = topic, groupId = "telemetry-service-group")
     public void handleSatelliteEvent(ConsumerRecord<String, SatelliteEvent> record) {
         try {
             SatelliteEvent event = record.value();
             log.info("Получено сообщение: " + event);
+
+            if (inboxService.existsById(InboxUtils.generateStableEventId(event))) {
+                log.info("Событие уже обработано, пропускаем");
+                return;
+            }
+
             switch (event.eventType()) {
                 case CREATED -> satelliteIdRepository.add(event.satelliteId());
                 case DELETED -> satelliteIdRepository.remove(event.satelliteId());

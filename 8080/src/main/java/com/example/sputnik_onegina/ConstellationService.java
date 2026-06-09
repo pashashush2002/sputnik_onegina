@@ -11,9 +11,7 @@ public class ConstellationService {
     private final ConstellationRepository constellationRepository;
     private final EnergyRepository energyRepository;
     private final SatelliteRepository satelliteRepository;
-    private final KafkaService kafkaService;
-
-    private static final String topic = "satellite-events";
+    private final OutboxEventService outboxEventService;
 
     public void createAndSaveConstellation(String name) {
         SatelliteConstellation constellation = new SatelliteConstellation(name);
@@ -41,8 +39,7 @@ public class ConstellationService {
         satellite = satelliteRepository.save(satellite);
         constellation.addSatellite(satellite);
         constellationRepository.save(constellation);
-        kafkaService.sendToKafkaSatellite(
-                topic,
+        outboxEventService.publishToOutbox(
                 KafkaUtils.createEvent(satellite, SatelliteEvent.EventType.CREATED)
         );
     }
@@ -98,8 +95,7 @@ public class ConstellationService {
         SatelliteConstellation constellation = findByConstellationName(constellationName);
         Satellite satellite = satelliteRepository.findByNameAndConstellationId(satelliteName, constellation.getId()).get();
         satelliteRepository.delete(satellite);
-        kafkaService.sendToKafkaSatellite(
-                topic,
+        outboxEventService.publishToOutbox(
                 KafkaUtils.createEvent(satellite, SatelliteEvent.EventType.DELETED)
         );
         System.out.println("Спутник "+ satelliteName + " удалён из группировки " + constellationName + '!');
