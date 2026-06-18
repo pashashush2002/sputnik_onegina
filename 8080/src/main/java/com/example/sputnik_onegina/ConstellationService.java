@@ -1,8 +1,14 @@
 package com.example.sputnik_onegina;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -90,6 +96,22 @@ public class ConstellationService {
         }
         return answer;
     }
+
+    @Cacheable(value = "satellites::all", key = "'all'")
+    @Transactional(readOnly = true)
+    public List<Satellite> getAllSatellites() {
+        return satelliteRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Satellite> getSatelliteById(Long id) {
+        return satelliteRepository.findById(id);
+    }
+
+    @Caching(evict = {
+            @CacheEvict(value = "satellite", key = "#id"),
+            @CacheEvict(value = "satellites::all", allEntries = true)
+    })
     public void deleteSatellite(String constellationName, String satelliteName) {
 
         SatelliteConstellation constellation = findByConstellationName(constellationName);
